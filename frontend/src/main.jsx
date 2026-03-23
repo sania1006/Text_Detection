@@ -1,3 +1,4 @@
+console.log("🚀 [MAIN.JSX] Booting application...");
 import React from "react";
 import ReactDOM from "react-dom/client";
 import { BrowserRouter } from "react-router-dom";
@@ -13,15 +14,14 @@ function MissingClerkKeyScreen() {
   return (
     <div
       style={{
-        minHeight: "100vh",
-        background: "#0a0c10",
-        color: "#e8eaed",
+        background: "#1a1f26",
+        color: "#ffffff",
         fontFamily: "system-ui, sans-serif",
-        padding: 40,
-        maxWidth: 560,
-        margin: "0 auto",
+        padding: "60px 20px",
+        textAlign: "center"
       }}
     >
+      <div style={{ fontSize: 48, marginBottom: 20 }}>⚠️</div>
       <h1 style={{ fontSize: 22, marginBottom: 16 }}>Clerk publishable key missing</h1>
       <p style={{ lineHeight: 1.6, marginBottom: 12 }}>
         Vite did not load <code style={{ color: "#7dd3fc" }}>VITE_CLERK_PUBLISHABLE_KEY</code>. Create or fix{" "}

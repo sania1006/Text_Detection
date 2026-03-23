@@ -287,28 +287,7 @@ function computeTextStats(text) {
 async function callGroqImageDetection(buffer) {
   const base64 = buffer.toString("base64");
   const completion = await getGroqClient().chat.completions.create({
-    model: "llama-3.2-11b-vision-preview",
-    messages: [
-      {
-        role: "user",
-        content: [
-          { type: "text", text: SYSTEM_PROMPT_IMAGE },
-          { type: "image_url", image_url: { url: `data:image/jpeg;base64,${base64}` } }
-        ]
-      }
-    ],
-    temperature: 0.0,
-    max_tokens: 500,
-  });
-
-  const raw = (completion.choices[0] && completion.choices[0].message && completion.choices[0].message.content) || "";
-  return extractJson(raw);
-}
-
-async function callGroqImageDetection(buffer) {
-  const base64 = buffer.toString("base64");
-  const completion = await getGroqClient().chat.completions.create({
-    model: "llama-3.2-11b-vision-preview",
+    model: "meta-llama/llama-4-scout-17b-16e-instruct",
     messages: [
       {
         role: "user",

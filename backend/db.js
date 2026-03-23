@@ -13,7 +13,10 @@ let _db = null;
 
 async function getDb() {
   if (_db) return _db;
-  const SQL = await initSqlJs();
+  const SQL = await initSqlJs({
+    // Vercel deployment has node_modules in the root task directory
+    locateFile: file => path.join(process.cwd(), "node_modules", "sql.js", "dist", file)
+  });
 
   if (fs.existsSync(DB_PATH)) {
     const buf = fs.readFileSync(DB_PATH);

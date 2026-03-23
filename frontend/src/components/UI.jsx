@@ -6,7 +6,8 @@ import React from "react";
 export function Gauge({ pct, color, size = 120 }) {
   const r = size * 0.4;
   const c = 2 * Math.PI * r;
-  const offset = c - (pct / 100) * c;
+  const validPct = isNaN(pct) ? 0 : Math.max(0, Math.min(100, pct));
+  const offset = c - (validPct / 100) * c;
   return (
     <div style={{ width: size, height: size, position: "relative", flexShrink: 0 }}>
       <svg viewBox={`0 0 ${size} ${size}`} style={{ width: "100%", height: "100%", transform: "rotate(-90deg)" }}>

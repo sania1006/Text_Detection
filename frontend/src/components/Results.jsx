@@ -47,9 +47,11 @@ function ScoreRow({ label, value, max = 100, color, tooltip }) {
 export default function Results({ result, onReset }) {
   const [showParagraphs, setShowParagraphs] = useState(false);
   const [showRawStats,   setShowRawStats]   = useState(false);
-  const color = getColor(result.verdict);
-  const ds = result.detailed_stats || {};
-  const pa = result.paragraph_analysis;
+  const color = getColor(result?.verdict);
+  const ds = result?.detailed_stats || {};
+  const pa = result?.paragraph_analysis;
+  
+  if (!result) return null;
 
   return (
     <div style={{ animation: "fadeUp 0.4s ease" }}>
@@ -74,9 +76,11 @@ export default function Results({ result, onReset }) {
             <VerdictBadge verdict={result.verdict} />
             <div style={{ fontSize:11, color:"var(--muted)", margin:"10px 0 4px" }}>
               Confidence: <strong style={{ color:"var(--text)" }}>{result.confidence}</strong>
-              {result.id && <span style={{ marginLeft:12, color:"var(--muted)" }}>
-                ID: <code style={{ color:"var(--accent)", fontSize:10 }}>{result.id.slice(0,8)}</code>
-              </span>}
+              {result.id && typeof result.id === "string" && (
+                <span style={{ marginLeft:12, color:"var(--muted)" }}>
+                  ID: <code style={{ color:"var(--accent)", fontSize:10 }}>{result.id.slice(0,8)}</code>
+                </span>
+              )}
             </div>
             <div style={{
               fontSize:13, lineHeight:1.75, color:"var(--text)",

@@ -1,7 +1,7 @@
 # 🔬 DetectAI Super Champion — AI Content Detector
 
 > **Hackathon Project** — Detect whether text or images were created by AI or a human.  
-> Supports **Text**, **URL**, **File Upload**, and **Image Analysis**.
+> Supports **Text**, **URL**, **File Upload**, and **Image AnalysiS**.
 
 [![Deploy with Vercel](https://vercel.com/button)](https://vercel.com/new/clone?repository-url=https://github.com/SAMPRIT-NANDI/DETECT-AI-SUPER-CHAMPION)
 

@@ -273,6 +273,14 @@ export const detectFile = (file) => {
   }).then(r => r.data);
 };
 
+export const detectImage = (file) => {
+  const form = new FormData();
+  form.append("image", file);
+  return api.post("/detect/image", form, {
+    headers: { "Content-Type": "multipart/form-data" },
+  }).then(r => r.data);
+};
+
 export const getHistory  = (p = 1, l = 20) => api.get(`/history?page=${p}&limit=${l}`).then(r => r.data);
 export const getScanById = (id) => api.get(`/history/${id}`).then(r => r.data);
 export const deleteScan  = (id) => api.delete(`/history/${id}`).then(r => r.data);

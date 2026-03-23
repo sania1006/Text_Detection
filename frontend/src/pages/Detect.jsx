@@ -1,6 +1,6 @@
 // pages/Detect.jsx
 import React, { useState, useRef, useCallback } from "react";
-import { detectText, detectUrl, detectFile } from "../utils/api";
+import { detectText, detectUrl, detectFile, detectImage } from "../utils/api";
 import Results from "../components/Results";
 import { Card, CardHeader, Button, Spinner } from "../components/UI";
 
@@ -11,9 +11,8 @@ export default function Detect() {
   const [file,      setFile]      = useState(null);
   const [loading,   setLoading]   = useState(false);
   const [statusMsg, setStatusMsg] = useState("");
-  const [result,    setResult]    = useState(null);
-  const [error,     setError]     = useState(null);
   const [dragging,  setDragging]  = useState(false);
+  const [preview,   setPreview]   = useState(null);
 
   // When URL extraction fails — show inline paste fallback
   const [showPasteFallback, setShowPasteFallback] = useState(false);
@@ -53,8 +52,8 @@ export default function Detect() {
         }
 
       } else {
-        setStatusMsg("Reading file…");
-        res = await detectFile(file);
+        setStatusMsg("Analyzing image forensic patterns…");
+        res = await detectImage(file);
       }
 
       setResult(res);
@@ -82,7 +81,18 @@ export default function Detect() {
   const handleDrop = e => {
     e.preventDefault(); setDragging(false);
     const f = e.dataTransfer.files[0];
-    if (f) setFile(f);
+    if (f && f.type.startsWith("image/")) {
+      setFile(f);
+      setPreview(URL.createObjectURL(f));
+    }
+  };
+
+  const onFileChange = e => {
+    const f = e.target.files[0];
+    if (f) {
+      setFile(f);
+      if (f.type.startsWith("image/")) setPreview(URL.createObjectURL(f));
+    }
   };
 
   // ── inline styles ──
@@ -150,8 +160,8 @@ export default function Detect() {
     <div style={S.page}>
       {/* Hero */}
       <div style={S.hero}>
-        <h1 style={S.h1}>Is this text <span style={S.accent}>AI-generated?</span></h1>
-        <p style={S.sub}>Multi-signal forensic analysis · Text · URLs · Files</p>
+        <h1 style={S.h1}>Is it <span style={S.accent}>AI-generated?</span></h1>
+        <p style={S.sub}>Multi-signal forensic analysis · Text · URLs · Images</p>
       </div>
 
       {/* Input */}
@@ -160,7 +170,7 @@ export default function Detect() {
           <CardHeader>Input Source</CardHeader>
 
           <div style={S.tabs}>
-            {[["text","✏️","Paste Text"],["url","🌐","From URL"],["file","📁","Upload File"]].map(([id,ic,lb]) => (
+            {[["text","✏️","Text"],["url","🌐","URL"],["file","🖼️","Image"]].map(([id,ic,lb]) => (
               <button key={id} onClick={() => { setTab(id); setShowPasteFallback(false); setError(null); }} style={S.tab(tab===id)}>
                 {ic} {lb}
               </button>
@@ -233,15 +243,22 @@ export default function Detect() {
                 onDrop={handleDrop}
                 style={S.drop(dragging)}
               >
-                <input ref={fileRef} type="file" accept=".txt,.md,.html,.htm,.pdf"
-                  style={{ display:"none" }} onChange={e => setFile(e.target.files[0])} />
-                <div style={{ fontSize:36, marginBottom:10 }}>{file ? "📄" : "📂"}</div>
-                <p style={{ fontSize:13, color:"var(--muted)", lineHeight:1.7 }}>
-                  {file
-                    ? <strong style={{ color:"var(--text)" }}>{file.name}</strong>
-                    : <><strong style={{ color:"var(--text)" }}>Click or drag</strong> to upload<br/>.txt · .md · .html · .pdf</>
-                  }
-                </p>
+                <input ref={fileRef} type="file" accept="image/*"
+                  style={{ display:"none" }} onChange={onFileChange} />
+                
+                {preview ? (
+                  <div style={{ position:"relative" }}>
+                    <img src={preview} alt="preview" style={{ maxWidth:"100%", maxHeight:300, borderRadius:8, border:"1px solid var(--border2)" }} />
+                    <div style={{ marginTop:12, fontSize:12, color:"var(--accent)" }}>{file.name}</div>
+                  </div>
+                ) : (
+                  <>
+                    <div style={{ fontSize:36, marginBottom:10 }}>🖼️</div>
+                    <p style={{ fontSize:13, color:"var(--muted)", lineHeight:1.7 }}>
+                      <strong style={{ color:"var(--text)" }}>Click or drag</strong> an image to analyze<br/>supports JPG · PNG · WEBP
+                    </p>
+                  </>
+                )}
               </div>
             )}
           </div>

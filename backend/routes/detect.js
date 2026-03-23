@@ -221,6 +221,22 @@ ai_probability = integer 0-100
 confidence = "Low" or "Medium" or "High" or "Very High"
 Output ONLY the JSON. Nothing before or after.`;
 
+const SYSTEM_PROMPT_IMAGE = `You are an expert AI image forensic analyst. Your task is to examine an uploaded image and determine if it was created by an AI image generator (Midjourney, DALL-E, Stable Diffusion) or if it is a real photograph/human-created digital art.
+
+Look for these AI GENERATION SIGNALS:
+- "Uncanny" skin textures (too smooth, plastic-like, or overly detailed in weird ways)
+- Lighting inconsistencies (shadows going the wrong way, light sources that don't exist)
+- Structural errors in complex objects: hands (too many fingers), eyes (mismatched pupils), hair (merging into skin)
+- Background "blur" that looks unnatural or inconsistent
+- Nonsensical text or symbols in the background
+- Perfect symmetry in organic objects where it shouldn't be
+- Repeating patterns or "checkerboard" artifacts in solid colors
+
+JSON structure to return:
+{"verdict":"AI","ai_probability":90,"confidence":"High","summary":"Analysis summary highlighting visual artifacts.","signals":{"texture":{"score":85,"label":"unnatural smoothness"},"lighting":{"score":70,"label":"inconsistent shadows"},"details":{"score":95,"label":"malformed limb structures"}},"ai_flags":["plastic skin","mismatched eyes"],"human_flags":[],"suspicious_phrases":[],"word_count":0,"sentence_count":0,"avg_sentence_length":0}
+
+Return ONLY raw JSON.`;
+
 function extractJson(raw) {
   if (!raw || !raw.trim()) throw new Error("Empty response from model.");
   try { return JSON.parse(raw.trim()); } catch(_) {}
@@ -265,6 +281,48 @@ function computeTextStats(text) {
     aiPhrasesFound:  foundPhrases,
     passiveCount:    passiveMatches.length,
   };
+}
+
+async function callGroqImageDetection(buffer) {
+  const base64 = buffer.toString("base64");
+  const completion = await getGroqClient().chat.completions.create({
+    model: "llama-3.2-11b-vision-preview",
+    messages: [
+      {
+        role: "user",
+        content: [
+          { type: "text", text: SYSTEM_PROMPT_IMAGE },
+          { type: "image_url", image_url: { url: `data:image/jpeg;base64,${base64}` } }
+        ]
+      }
+    ],
+    temperature: 0.0,
+    max_tokens: 500,
+  });
+
+  const raw = (completion.choices[0] && completion.choices[0].message && completion.choices[0].message.content) || "";
+  return extractJson(raw);
+}
+
+async function callGroqImageDetection(buffer) {
+  const base64 = buffer.toString("base64");
+  const completion = await getGroqClient().chat.completions.create({
+    model: "llama-3.2-11b-vision-preview",
+    messages: [
+      {
+        role: "user",
+        content: [
+          { type: "text", text: SYSTEM_PROMPT_IMAGE },
+          { type: "image_url", image_url: { url: `data:image/jpeg;base64,${base64}` } }
+        ]
+      }
+    ],
+    temperature: 0.0,
+    max_tokens: 500,
+  });
+
+  const raw = (completion.choices[0] && completion.choices[0].message && completion.choices[0].message.content) || "";
+  return extractJson(raw);
 }
 
 async function callGroqDetection(text) {
@@ -389,6 +447,19 @@ router.post("/file", upload.single("file"), async (req, res) => {
     res.json({ id, filename: req.file.originalname, ...result });
   } catch (err) {
     console.error("[file]", err.message);
+    res.status(err.status || 500).json({ error: err.message });
+  }
+});
+
+router.post("/image", upload.single("image"), async (req, res) => {
+  try {
+    if (!req.file) return res.status(400).json({ error: "No image uploaded" });
+    const result = await callGroqImageDetection(req.file.buffer);
+    const id = uuidv4();
+    await saveScan(id, "image", req.file.originalname, "Image Analysis", result, req.ip);
+    res.json({ id, ...result });
+  } catch (err) {
+    console.error("[image]", err.message);
     res.status(err.status || 500).json({ error: err.message });
   }
 });

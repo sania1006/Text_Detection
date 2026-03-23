@@ -13,6 +13,8 @@ export default function Detect() {
   const [statusMsg, setStatusMsg] = useState("");
   const [dragging,  setDragging]  = useState(false);
   const [preview,   setPreview]   = useState(null);
+  const [result,    setResult]    = useState(null);
+  const [error,     setError]     = useState(null);
 
   // When URL extraction fails — show inline paste fallback
   const [showPasteFallback, setShowPasteFallback] = useState(false);

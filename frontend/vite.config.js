@@ -10,12 +10,12 @@ export default defineConfig({
   envDir: __dirname,
   plugins: [react()],
   server: {
-    port: 5173,
-    // If 5173 is taken, try the next port instead of exiting (avoids "ghost" servers + missing env).
-    strictPort: true,
+    port: 5174,
+    // If 5174 is taken, try the next port instead of exiting (avoids "ghost" servers + missing env).
+    strictPort: false,
     proxy: {
       "/api": {
-        target: "http://localhost:4000",
+        target: "http://localhost:4001",
         changeOrigin: true,
       },
     },

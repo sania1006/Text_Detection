@@ -33,7 +33,8 @@ const upload = multer({
       "text/plain","text/html","text/markdown","application/pdf",
       "application/msword","application/octet-stream","binary/octet-stream",
       "application/vnd.openxmlformats-officedocument.wordprocessingml.document",
-    ].includes(file.mimetype) || /\.(txt|md|html|htm|pdf)$/i.test(file.originalname);
+      "image/jpeg", "image/png", "image/webp"
+    ].includes(file.mimetype) || /\.(txt|md|html|htm|pdf|jpg|jpeg|png|webp)$/i.test(file.originalname);
     ok ? cb(null, true) : cb(new Error("Unsupported file type."));
   },
 });

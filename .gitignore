@@ -14,3 +14,5 @@ tmp_benchmark.js
 .agent/
 _agents/
 _agent/
+backend/data/
+*.db

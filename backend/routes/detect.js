@@ -10,8 +10,8 @@ const db = require("../db");
 
 console.log("detect.js VERSION 4.0-ACCURATE loaded");
 
-let PDFParse;
-try { PDFParse = require("pdf-parse").PDFParse; } catch(e) {}
+let pdf;
+try { pdf = require("pdf-parse"); } catch(e) {}
 
 let groqClient;
 function getGroqClient() {
@@ -325,10 +325,9 @@ async function callGroqDetection(text) {
 
 async function extractFromFile(buffer, mimetype, originalname) {
   if (mimetype === "application/pdf" || originalname.toLowerCase().endsWith(".pdf")) {
-    if (!PDFParse) throw new Error("PDF parser unavailable.");
-    const parser = new PDFParse({ data: buffer });
-    const result = await parser.getText();
-    const text = (typeof result.text === "string" ? result.text : (result.pages||[]).map(function(p) { return p.text||""; }).join("\n")).replace(/\s+/g," ").trim();
+    if (!pdf) throw new Error("PDF parser unavailable.");
+    const result = await pdf(buffer);
+    const text = (result.text || "").replace(/\s+/g," ").trim();
     if (text.length < 50) throw new Error("No readable text in PDF.");
     return text;
   }

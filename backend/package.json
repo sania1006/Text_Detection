@@ -9,6 +9,7 @@
   },
   "dependencies": {
     "@clerk/express": "^2.0.6",
+    "ai-detector-root": "file:..",
     "axios": "^1.7.2",
     "cheerio": "^1.0.0",
     "cors": "^2.8.5",

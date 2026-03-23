@@ -12,7 +12,7 @@ export default defineConfig({
   server: {
     port: 5173,
     // If 5173 is taken, try the next port instead of exiting (avoids "ghost" servers + missing env).
-    strictPort: false,
+    strictPort: true,
     proxy: {
       "/api": {
         target: "http://localhost:4000",

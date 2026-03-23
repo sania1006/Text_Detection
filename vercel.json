@@ -3,7 +3,7 @@
   "outputDirectory": "frontend/dist",
   "functions": {
     "api/index.js": {
-      "includeFiles": ["backend/**", "node_modules/sql.js/dist/sql-wasm.wasm"],
+      "includeFiles": "backend/**",
       "maxDuration": 30
     }
   },

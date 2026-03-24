@@ -129,7 +129,7 @@ flowchart TD
 ```mermaid
 flowchart TD
     A([🖼️ User uploads image\nJPG · PNG · WebP]) --> B["🔐 Auth Check\nClerk JWT verified"]
-    B --> C["✅ File Validator\nCheck MIME type · Enforce 10 MB cap\nReject unsupported formats"]
+    B --> C["✅ media Validator\nCheck MIME type · Enforce 10 MB cap\nReject unsupported formats"]
     C --> D["📦 Multer Handler\nBuffer image in memory\nPrepare base64 payload"]
     D --> E["⚡ Groq API Call\nLlama 4 Scout — Multimodal Vision"]
 
@@ -154,13 +154,13 @@ flowchart TD
 
 ```mermaid
 flowchart TD
-    A1([📄 File Upload\n.txt · .md · .html · .pdf]) --> IN["🔀 Input Router\nDetects source type"]
+    A1([📄 Media Upload\n.txt · .md · .html · .pdf]) --> IN["🔀 Input Router\nDetects source type"]
     A2([🔗 URL Submission\nhttps://...]) --> IN
 
     IN --> B1["📂 File Handler — Multer\nRead buffer · Detect encoding"]
     IN --> B2["🌐 URL Fetcher — Axios\nHTTP GET public URL"]
 
-    B1 --> C1["📑 File Text Extractor\n.txt/.md → raw text\n.html → Cheerio DOM strip\n.pdf → PDF parser"]
+    B1 --> C1["📑 media Text Extractor\n.txt/.md → raw text\n.html → Cheerio DOM strip\n.pdf → PDF parser"]
     B2 --> C2["🧽 HTML Scraper — Cheerio\nStrip nav/footer/ads\nExtract body content only"]
 
     C1 --> D["🧹 Shared Pre-processor\nMerge · Normalize · Truncate to 8,000 chars\nCount words · Store source_ref"]

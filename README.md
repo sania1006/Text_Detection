@@ -32,7 +32,7 @@
 |---|---|
 | 📝 **Text Detection** | Paste any text (≥ 20 words) for AI probability analysis |
 | 🌐 **URL Detection** | Scrape and analyze content from any public URL |
-| 📄 **File Upload** | Upload `.txt`, `.md`, `.html`, or `.pdf` files |
+| 📄 **Media Upload** | Upload `.txt`, `.md`, `.html`, or `.pdf` files |
 | 🖼️ **Image Detection** | Upload JPG, PNG, or WebP to detect AI-generated visuals |
 | 📊 **Statistics Dashboard** | Aggregated scan results, trends, and breakdowns |
 | 📋 **Scan History** | Browse, inspect, and delete past scans |

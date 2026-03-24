@@ -40,7 +40,33 @@
 | ⚡ **Real-time Analysis** | Powered by Groq LPU — results in under 2 seconds |
 
 ---
+## 📊 Model Evaluation Results
 
+---
+
+### 🔁 Per-Epoch Results — Politics
+
+![Epoch 1 Politics](assets/results/epoch1_politics.png)
+![Epoch 2 Politics](assets/results/epoch2_politics.png)
+![Epoch 3 Politics](assets/results/epoch3_politics.png)
+
+---
+
+### 🔁 Per-Epoch Results — Science
+
+![Epoch 1 Science](assets/results/epoch1_science.png)
+![Epoch 2 Science](assets/results/epoch2_science.png)
+![Epoch 3 Science](assets/results/epoch3_science.png)
+
+---
+
+### 🗳️ Soft Vote Ensemble Results
+
+![Softvote Politics](assets/results/softvote_politics.png)
+![Softvote Sports](assets/results/softvote_sports.png)
+![Softvote Lifestyle](assets/results/softvote_lifestyle.png)
+![Softvote Opinion](assets/results/softvote_opinion.png)
+![Softvote Science](assets/results/softvote_science.png)
 ## 🏛️ System Architecture
 
 > A bird's-eye view of how the layers connect — from browser to database.
